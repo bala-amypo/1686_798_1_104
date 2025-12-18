@@ -27,10 +27,17 @@ public class PolicyRule {
     private Boolean active = true;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public String getRuleCode() { return ruleCode; }
-    public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
-    public String getDescription() { return description; }
+    public Long getId() { 
+    return id; 
+    }
+    public String getRuleCode() { 
+    return ruleCode;
+     }
+    public void setRuleCode(String ruleCode) {
+     this.ruleCode = ruleCode; 
+     }
+    public String getDescription() {
+     return description; }
     public void setDescription(String description) { this.description = description; }
     public String getAppliesToRole() { return appliesToRole; }
     public void setAppliesToRole(String appliesToRole) { this.appliesToRole = appliesToRole; }
