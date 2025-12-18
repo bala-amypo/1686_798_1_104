@@ -35,7 +35,9 @@ public class IssuedDeviceRecord {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
+    public Long getId() {
+         return id; 
+         }
     public Long getEmployeeId() { return employeeId; }
     public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
     public Long getDeviceItemId() { return deviceItemId; }
