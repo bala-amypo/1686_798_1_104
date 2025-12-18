@@ -8,9 +8,8 @@ import jakarta.persistence.*;
     uniqueConstraints = @UniqueConstraint(columnNames = "email")
 )
 public class UserAccount {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String fullName;
@@ -56,3 +55,5 @@ public class UserAccount {
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 }
+
+
