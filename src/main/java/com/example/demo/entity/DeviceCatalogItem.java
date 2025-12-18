@@ -8,12 +8,10 @@ import jakarta.persistence.*;
     uniqueConstraints = @UniqueConstraint(columnNames = "deviceCode")
 )
 public class DeviceCatalogItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
+   @Column(nullable = false)
     private String deviceCode;
 
     private String deviceType;
@@ -26,7 +24,10 @@ public class DeviceCatalogItem {
     private Boolean active = true;
 
     // Getters and Setters
-    public Long getId() { return id; }
+    public Long getId() 
+    {
+         return id; 
+         }
     public String getDeviceCode() { return deviceCode; }
     public void setDeviceCode(String deviceCode) { this.deviceCode = deviceCode; }
     public String getDeviceType() { return deviceType; }
