@@ -24,7 +24,7 @@ public class UserAccount {
 
     private Boolean active = true;
 
-    // Getters and Setters
+
     public Long getId() {
          return id; 
          }
