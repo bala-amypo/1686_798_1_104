@@ -1,15 +1,13 @@
 package com.example.demo.service;
 
 import java.util.List;
-import com.example.demo.entity.EmployeeProfile;
+import com.example.demo.entity.IssuedDeviceRecord;
 
-public interface EmployeeProfileService {
+public interface IssuedDeviceRecordService {
 
-    EmployeeProfile createEmployee(EmployeeProfile employee);
+    IssuedDeviceRecord issueDevice(IssuedDeviceRecord record);
 
-    EmployeeProfile getEmployeeByld(Long id);
+    IssuedDeviceRecord returnDevice(Long recordld);
 
-    List<EmployeeProfile> getAllEmployees();
-
-    EmployeeProfile updateEmployeeStatus(Long id, boolean active);
+    List<IssuedDeviceRecord> getlssuedDevicesByEmployee(Long employeeld);
 }
