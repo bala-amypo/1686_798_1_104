@@ -22,7 +22,7 @@ public class EmployeeProfileServiceImpl implements EmployeeProfileService {
     @Override
     public EmployeeProfile createEmployee(EmployeeProfile employee) {
 
-        if (repository.findByEmployeeld(employee.getEmployeeId()).isPresent()) {
+        if (repository.findByEmployeeId(employee.getEmployeeId()).isPresent()) {
             throw new BadRequestException("Employeeld already exists");
         }
 
