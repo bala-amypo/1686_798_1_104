@@ -57,4 +57,4 @@
 //     public LocalDateTime getCheckedAt() { 
 //         return checkedAt; 
 //         }
-// }
+}

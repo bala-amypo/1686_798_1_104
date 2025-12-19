@@ -66,5 +66,5 @@
 //      {
 //          this.active = active;
 //           }
-// }
+}
 

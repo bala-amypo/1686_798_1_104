@@ -18,7 +18,7 @@ public class EmployeeProfile {
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;   // ✅ Capital I (correct ID)
+    private String employeeId; 
 
     @Column(nullable = false)
     private String email;
