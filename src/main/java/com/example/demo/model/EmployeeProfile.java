@@ -1,6 +1,8 @@
 package com.example.demo.entity;
+
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+
 @Entity
 @Table(
     name = "employee_profiles",
@@ -10,20 +12,19 @@ import jakarta.persistence.*;
     }
 )
 public class EmployeeProfile {
- @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String employeeId;
-
-    private String fullName;
+    private String employeeId;   // ✅ Capital I (correct ID)
 
     @Column(nullable = false)
     private String email;
 
+    private String fullName;
     private String department;
-
     private String jobRole;
 
     private Boolean active = true;
@@ -34,56 +35,61 @@ public class EmployeeProfile {
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-    public Long getId() { return id; }
-    public String getEmployeeId() 
-    { 
-    return employeeId; 
+
+    // Getters & Setters
+    public Long getId() {
+        return id;
     }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
     public void setEmployeeId(String employeeId) {
-         this.employeeId = employeeId; 
-         }
-    public String getFullName() 
-    {
-     return fullName;
-      }
-    public void setFullName(String fullName) 
-    {
-         this.fullName = fullName;
-          }
-    public String getEmail() 
-    {
-         return email;
-          }
-    public void setEmail(String email) 
-    {
-         this.email = email; 
-         }
-    public String getDepartment() 
-    {
-         return department; 
-         }
-    public void setDepartment(String department)
-     {
-         this.department = department; 
-         }
-    public String getJobRole() 
-    { 
-        return jobRole; 
-        }
-    public void setJobRole(String jobRole)
-     {
-         this.jobRole = jobRole; 
-         }
-    public Boolean getActive()
-     {
-         return active; 
-         }
-    public void setActive(Boolean active) 
-    {
-         this.active = active;
-          }
-    public LocalDateTime getCreatedAt()
-     {
-         return createdAt; 
-         }
+        this.employeeId = employeeId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getJobRole() {
+        return jobRole;
+    }
+
+    public void setJobRole(String jobRole) {
+        this.jobRole = jobRole;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
