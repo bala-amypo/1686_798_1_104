@@ -22,8 +22,7 @@ public class DeviceCatalogItem {
     private Integer maxAllowedPerEmployee;
 
     private Boolean active = true;
-
-    // Getters and Setters
+    
     public Long getId() 
    
     {

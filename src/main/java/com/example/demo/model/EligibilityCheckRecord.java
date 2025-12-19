@@ -26,7 +26,7 @@ public class EligibilityCheckRecord {
         this.checkedAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+  
     public Long getId(){
          return id; 
          }

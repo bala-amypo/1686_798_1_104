@@ -33,7 +33,7 @@ public class IssuedDeviceRecord {
         }
     }
 
-    // Getters and Setters
+ 
     public Long getId() {
          return id; 
          }
