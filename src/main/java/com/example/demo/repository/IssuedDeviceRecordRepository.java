@@ -1,15 +1,72 @@
-package com.example.demo.repository;
+package com.example.demo.entity;
 
-import java.util.List;
+import java.time.LocalDate;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-import com.example.demo.entity.IssuedDeviceRecord;
+@Entity
+public class IssuedDeviceRecord {
 
-public interface IssuedDeviceRecordRepository
-        extends JpaRepository<IssuedDeviceRecord, Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    long countActiveDevicesForEmployee(Long employeeld);
+    private Long employeeld;
+    private Long deviceltemld;
+    private LocalDate issuedDate;
+    private LocalDate returnedDate;
+    private String status;
 
-    List<IssuedDeviceRecord> findByEmployeeld(Long employeeld);
+    // getters & setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getEmployeeld() {
+        return employeeld;
+    }
+
+    public void setEmployeeld(Long employeeld) {
+        this.employeeld = employeeld;
+    }
+
+    public Long getDeviceltemld() {
+        return deviceltemld;
+    }
+
+    public void setDeviceltemld(Long deviceltemld) {
+        this.deviceltemld = deviceltemld;
+    }
+
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public LocalDate getReturnedDate() {
+        return returnedDate;
+    }
+
+    public void setReturnedDate(LocalDate returnedDate) {
+        this.returnedDate = returnedDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
