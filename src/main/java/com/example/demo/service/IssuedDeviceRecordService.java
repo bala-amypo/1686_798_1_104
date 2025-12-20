@@ -10,5 +10,5 @@ public interface IssuedDeviceRecordService {
 
     IssuedDeviceRecord returnDevice(Long recordld);
 
-    List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeld);
+    List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId);
 }
