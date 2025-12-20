@@ -28,7 +28,7 @@ public class IssuedDeviceRecordController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public List<IssuedDeviceRecord> getByEmployee(@PathVariable Long employeeId) {
+    public List<IssuedDeviceRecord> getByEmployee(@PathVariable Long employeeId){
         return service.getIssuedDevicesByEmployee(employeeId);
     }
 }
