@@ -1,16 +1,3 @@
-package com.example.demo.service.impl;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.IssuedDeviceRecord;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.IssuedDeviceRecordRepository;
-import com.example.demo.service.IssuedDeviceRecordService;
-
 @Service
 public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService {
 
@@ -31,8 +18,7 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         });
 
         record.setIssuedDate(LocalDate.now());
-        record.setReturnedDate(null);
-        record.setStatus("ISSUED");
+        record.setReturnedDate(null); // status = ISSUED (auto)
 
         return repository.save(record);
     }
@@ -47,8 +33,7 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
             throw new BadRequestException("already returned");
         }
 
-        record.setReturnedDate(LocalDate.now());
-        record.setStatus("RETURNED");
+        record.setReturnedDate(LocalDate.now()); // status = RETURNED (auto)
 
         return repository.save(record);
     }
