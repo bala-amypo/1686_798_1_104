@@ -2,7 +2,10 @@ package com.example.demo.entity;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class IssuedDeviceRecord {
@@ -11,35 +14,60 @@ public class IssuedDeviceRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long employeeld;
-    private Long deviceltemld;
+    private Long employeeId;
+    private Long deviceItemId;
+
     private LocalDate issuedDate;
     private LocalDate returnedDate;
 
-    // ISSUED / RETURNED
-    private String status;
+    private String status; // ISSUED / RETURNED
 
-    @PrePersist
-    @PreUpdate
-    public void updateStatus() {
-        this.status = (returnedDate == null) ? "ISSUED" : "RETURNED";
+    // ✅ getters & setters
+    public Long getId() {
+        return id;
     }
 
-    // getters & setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getEmployeeld() { return employeeld; }
-    public void setEmployeeld(Long employeeld) { this.employeeld = employeeld; }
+    public Long getEmployeeId() {
+        return employeeId;
+    }
 
-    public Long getDeviceltemld() { return deviceltemld; }
-    public void setDeviceltemld(Long deviceltemld) { this.deviceltemld = deviceltemld; }
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
 
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
+    public Long getDeviceItemId() {
+        return deviceItemId;
+    }
 
-    public LocalDate getReturnedDate() { return returnedDate; }
-    public void setReturnedDate(LocalDate returnedDate) { this.returnedDate = returnedDate; }
+    public void setDeviceItemId(Long deviceItemId) {
+        this.deviceItemId = deviceItemId;
+    }
 
-    public String getStatus() { return status; }
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public LocalDate getReturnedDate() {
+        return returnedDate;
+    }
+
+    public void setReturnedDate(LocalDate returnedDate) {
+        this.returnedDate = returnedDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
