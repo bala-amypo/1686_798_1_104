@@ -23,23 +23,26 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
     @Override
     public IssuedDeviceRecord issueDevice(IssuedDeviceRecord record) {
 
-        repository.findActiveByEmployeeAndDevice(
-                record.getEmployeeld(),
-                record.getDeviceltemld()
-        ).ifPresent(r -> {
+        IssuedDeviceRecord existing =
+                repository.findByEmployeeIdAndDeviceItemIdAndReturnedDateIsNull(
+                        record.getEmployeeId(),
+                        record.getDeviceItemId()
+                );
+
+        if (existing != null) {
             throw new BadRequestException("already returned");
-        });
+        }
 
         record.setIssuedDate(LocalDate.now());
-        record.setReturnedDate(null);
+        record.setStatus("ISSUED");
 
         return repository.save(record);
     }
 
     @Override
-    public IssuedDeviceRecord returnDevice(Long recordld) {
+    public IssuedDeviceRecord returnDevice(Long recordId) {
 
-        IssuedDeviceRecord record = repository.findById(recordld)
+        IssuedDeviceRecord record = repository.findById(recordId)
                 .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
 
         if (record.getReturnedDate() != null) {
@@ -47,12 +50,13 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         }
 
         record.setReturnedDate(LocalDate.now());
+        record.setStatus("RETURNED");
 
         return repository.save(record);
     }
 
     @Override
-    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeld) {
-        return repository.findByEmployeeld(employeeld);
+    public List<IssuedDeviceRecord> getIssuedDevicesByEmployee(Long employeeId) {
+        return repository.findByEmployeeId(employeeId);
     }
 }
