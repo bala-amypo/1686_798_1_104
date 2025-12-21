@@ -1,59 +1,51 @@
-// package com.example.demo.entity;
+STEP 0 - Technical Constraints (Critical for Testing)
 
-// import jakarta.persistence.*;
+You must strictly follow these technical rules to pass the automated test suite:
 
-// @Entity
-// @Table(
-//     name = "user_accounts",
-//     uniqueConstraints = @UniqueConstraint(columnNames = "email")
-// )
-// public class UserAccount {
-//     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+1. Dependency Injection:
 
-//     private String fullName;
+You must use Constructor Injection for all Service classes. Do not use Field
+Injection (@Autowired on fields). The test suite instantiates services
+manually using constructors.
 
-//     @Column(nullable = false)
-//     private String email;
+2. Custom Exceptions:
 
-//     @Column(nullable = false)
-//     private String passwordHash;
+. Create com.example.demo.exception.BadRequestException (used for
+validation errors).
+Create com.example.demo.exception.ResourceNotFoundException (used
+for missing entities).
 
-//     private String role; // ADMIN / IT_OPERATOR / AUDITOR
+3. Exception Messages:
 
-//     private Boolean active = true;
+. When throwing BadRequestException, your message must contain these
+keywords:
 
+Duplicate Employee ID: "Employeeld already exists"
+Invalid Max Limit: "maxAllowedPerEmployee"
+Device Already Returned: "already returned"
+Duplicate Rule Code: "Rule code"
+4. Repository Method Signatures (Exact Naming Required):
+. EmployeeProfileRepository: findByEmployeeld(String employeeld)
+. DeviceCatalogltemRepository: findByDeviceCode(String deviceCode)
+. IssuedDeviceRecordRepository: countActiveDevicesForEmployee(Long
+employeeld)
+. IssuedDeviceRecordRepository: findActiveByEmployeeAndDevice(Long
+employeeld, Long deviceltemld)
+. PolicyRuleRepository: findByActiveTrue()
+. PolicyRuleRepository: findByRuleCode(String ruleCode)
+. EligibilityCheckRecordRepository: findByEmployeeld(Long employeeld)
 
-//     public Long getId() {
-//          return id; 
-//          }
-//     public String getFullName() { 
-//         return fullName;
-//          }
-//     public void setFullName(String fullName) { 
-//         this.fullName = fullName;
-//          }
-//     public String getEmail() {
-//      return email; 
-//      }
-//     public void setEmail(String email) {
-//      this.email = email; 
-//      }
-//     public String getPasswordHash() {
-//          return passwordHash; 
-//          }
-//     public void setPasswordHash(String passwordHash) { 
-//         this.passwordHash = passwordHash;
-//          }
-//     public String getRole() {
-//          return role; 
-//          }
-//     public void setRole(String role) {
-//          this.role = role;
-//           }
-//     public Boolean getActive() { return active; }
-//     public void setActive(Boolean active) { this.active = active; }
-// }
+Entity:
+6. UserAccount
 
+. Fields: id (Long, PK), fullName (String), email (String), passwordHash (String),
+role (String: ADMIN / IT_OPERATOR / AUDITOR), active (Boolean)
+Rules:
 
+email must be unique.
+Password must be hashed.
+
+Repository:
+UserAccountRepository
+
+I
