@@ -22,7 +22,7 @@ public class IssuedDeviceRecord {
 
     private String status; // ISSUED / RETURNED
 
-    // ✅ getters & setters
+ 
     public Long getId() {
         return id;
     }
