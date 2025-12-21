@@ -1,62 +1,60 @@
-// package com.example.demo.entity;
+STEP 0 - Technical Constraints (Critical for Testing)
 
-// import java.time.LocalDateTime;
-// import jakarta.persistence.*;
+You must strictly follow these technical rules to pass the automated test suite:
 
-// @Entity
-// @Table(name = "eligibility_check_records")
-// public class EligibilityCheckRecord {
+1. Dependency Injection:
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+You must use Constructor Injection for all Service classes. Do not use
+Field Injection (@Autowired on fields). The test suite instantiates services
+manually using constructors.
 
-//     private Long employeeId;
+2. Custom Exceptions:
 
-//     private Long deviceItemId;
+Create com.example.demo.exception.BadRequestException (used for
+validation errors).
+. Create com.example.demo.exception.ResourceNotFoundException
+(used for missing entities).
+3. Exception Messages:
+When throwing BadRequestException, your message must contain these
+keywords:
 
-//     private Boolean isEligible;
+Duplicate Employee ID: "Employeeld already exists"
+Invalid Max Limit: "maxAllowedPerEmployee"
+Device Already Returned: "already returned"
+Duplicate Rule Code: "Rule code"
 
-//     private String reason;
+4. Repository Method Signatures (Exact Naming Required):
+EmployeeProfileRepository: findByEmployeeld(String employeeld)
+. DeviceCatalogItemRepository: findByDeviceCode(String deviceCode)
+. IssuedDeviceRecordRepository: countActiveDevicesForEmployee(Long
+employeeld)
+. IssuedDeviceRecordRepository: findActiveByEmployeeAndDevice(Long
+employeeld, Long deviceltemld)
+. PolicyRuleRepository: findByActiveTrue()
+. PolicyRuleRepository: findByRuleCode(String ruleCode)
+EligibilityCheckRecordRepository: findByEmployeeld(Long employeeld)
 
-//     private LocalDateTime checkedAt;
+Entity:
+.
 
-//     @PrePersist
-//     public void onCheck() {
-//         this.checkedAt = LocalDateTime.now();
-//     }
+midetive Tuies dre igiiored duning valldation.
 
-  
-//     public Long getId(){
-//          return id; 
-//          }
-//     public Long getEmployeeId() { 
-//         return employeeId; 
-//         }
-//     public void setEmployeeId(Long employeeId) {
-//          this.employeeId = employeeId; 
-//          }
-//     public Long getDeviceItemId() {
-//          return deviceItemId;
-//           }
-//     public void setDeviceItemId(Long deviceItemId) { 
-//         this.deviceItemId = deviceItemId;
-//          }
-//     public Boolean getIsEligible() {
-//          return isEligible; 
-//          }
-//     public void setIsEligible(Boolean isEligible) {
-//          this.isEligible = isEligible;
-//           }
-//     public String getReason() { 
-//         return reason; 
-//         }
-//     public void setReason(String reason) { 
-//         this.reason = reason;
-//          }
-//     public LocalDateTime getCheckedAt() { 
-//         return checkedAt; 
-//         }
-// }
+5. EligibilityCheckRecord
 
+. Fields: id (Long, PK), employeeld (Long), deviceltemld (Long), isEligible
+(Boolean), reason (String), checkedAt (LocalDateTime)
+Rules:
 
+Every validation attempt must generate a record.
+checkedAt auto-populated on save (@PrePersist).
+
+Repository:
+STEP 3 - Repositories (MySQL)
+
+EligibilityCheckRecordRepository
+Implements Service interfcace:
+5. EligibilityCheckService
+
+. validateEligibility(Long employeeld, Long deviceltemld)
+. getChecksByEmployee(Long employeeld)
+Controllers:
