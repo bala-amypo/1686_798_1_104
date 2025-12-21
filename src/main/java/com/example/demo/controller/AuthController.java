@@ -9,13 +9,11 @@ public class AuthController {
     public AuthController(AuthService service) {
         this.service = service;
     }
-
     @PostMapping("/register")
     public UserAccount register(@RequestBody UserAccount user) {
         return service.register(user);
     }
-
-    @PostMapping("/login")
+   @PostMapping("/login")
     public UserAccount login(
             @RequestParam String email,
             @RequestParam String password) {
