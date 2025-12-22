@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Entity
 public class IssuedDeviceRecord {
@@ -20,15 +22,25 @@ public class IssuedDeviceRecord {
     private LocalDate issuedDate;
     private LocalDate returnedDate;
 
-    private String status; // ISSUED / RETURNED
-
- 
-    public Long getId() {
-        return id;
+    private String status; 
+    @PrePersist
+    public void onIssue() {
+        if (this.issuedDate == null) {
+            this.issuedDate = LocalDate.now();
+        }
+        this.status = "ISSUED";
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PreUpdate
+    public void onReturn() {
+        if (this.returnedDate != null) {
+            this.status = "RETURNED";
+        }
+    }
+
+
+    public Long getId() {
+        return id;
     }
 
     public Long getEmployeeId() {
@@ -51,10 +63,6 @@ public class IssuedDeviceRecord {
         return issuedDate;
     }
 
-    public void setIssuedDate(LocalDate issuedDate) {
-        this.issuedDate = issuedDate;
-    }
-
     public LocalDate getReturnedDate() {
         return returnedDate;
     }
@@ -65,9 +73,5 @@ public class IssuedDeviceRecord {
 
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
