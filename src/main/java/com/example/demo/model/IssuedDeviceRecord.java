@@ -22,7 +22,10 @@ public class IssuedDeviceRecord {
     private LocalDate issuedDate;
     private LocalDate returnedDate;
 
-    private String status; 
+    private String status;
+
+ 
+
     @PrePersist
     public void onIssue() {
         if (this.issuedDate == null) {
@@ -37,7 +40,6 @@ public class IssuedDeviceRecord {
             this.status = "RETURNED";
         }
     }
-
 
     public Long getId() {
         return id;
@@ -63,6 +65,10 @@ public class IssuedDeviceRecord {
         return issuedDate;
     }
 
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
     public LocalDate getReturnedDate() {
         return returnedDate;
     }
@@ -73,5 +79,9 @@ public class IssuedDeviceRecord {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
