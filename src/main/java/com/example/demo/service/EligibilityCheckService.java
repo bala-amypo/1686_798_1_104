@@ -6,7 +6,7 @@ import com.example.demo.entity.EligibilityCheckRecord;
 
 public interface EligibilityCheckService {
 
-    EligibilityCheckRecord validateEligibility(Long employeeld, Long deviceltemld);
+    EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceltemId);
 
-    List<EligibilityCheckRecord> getChecksByEmployee(Long employeeld);
+    List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId);
 }
