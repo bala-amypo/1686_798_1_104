@@ -16,11 +16,11 @@ public class EligibilityCheckController {
     @PostMapping("/validate/{employeeId}/{deviceltemId}")
     public EligibilityCheckRecord validate(
             @PathVariable Long employeeId,
-            @PathVariable Long deviceltemld) {
-        return service.validateEligibility(employeeld, deviceltemld);
+            @PathVariable Long deviceltemId) {
+        return service.validateEligibility(employeeId, deviceltemId);
     }
-@GetMapping("/employee/{employeeld}")
-    public List<EligibilityCheckRecord> getByEmployee(@PathVariable Long employeeld) {
-        return service.getChecksByEmployee(employeeld);
+@GetMapping("/employee/{employeeId}")
+    public List<EligibilityCheckRecord> getByEmployee(@PathVariable Long employeeId) {
+        return service.getChecksByEmployee(employeeId);
     }
 }
