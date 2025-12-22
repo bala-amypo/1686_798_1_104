@@ -36,7 +36,6 @@ public class EmployeeProfile {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }
