@@ -13,7 +13,6 @@ public class EligibilityCheckController {
     public EligibilityCheckController(EligibilityCheckService service) {
         this.service = service;
     }
-
     @PostMapping("/validate/{employeeld}/{deviceltemld}")
     public EligibilityCheckRecord validate(
             @PathVariable Long employeeld,
