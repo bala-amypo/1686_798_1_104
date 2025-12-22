@@ -12,18 +12,16 @@ import com.example.demo.service.EligibilityCheckService;
 public class EligibilityCheckServiceImpl implements EligibilityCheckService {
 
     private final EligibilityCheckRecordRepository repository;
-
     public EligibilityCheckServiceImpl(EligibilityCheckRecordRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public EligibilityCheckRecord validateEligibility(Long employeeld, Long deviceltemld) {
+    public EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceltemId) {
 
         EligibilityCheckRecord record = new EligibilityCheckRecord();
-        record.setEmployeeld(employeeld);
-        record.setDeviceltemld(deviceltemld);
-
+        record.setEmployeeId(employeeId);     
+        record.setDeviceltemId(deviceltemId);
 
         record.setIsEligible(true);
         record.setReason("Eligible");
@@ -32,7 +30,7 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
     }
 
     @Override
-    public List<EligibilityCheckRecord> getChecksByEmployee(Long employeeld) {
-        return repository.findByEmployeeld(employeeld);
+    public List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId) {
+        return repository.findByEmployeeId(employeeId);   
     }
 }
