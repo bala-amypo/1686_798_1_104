@@ -13,9 +13,9 @@ public class EligibilityCheckController {
     public EligibilityCheckController(EligibilityCheckService service) {
         this.service = service;
     }
-    @PostMapping("/validate/{employeeld}/{deviceltemld}")
+    @PostMapping("/validate/{employeeId}/{deviceltemId}")
     public EligibilityCheckRecord validate(
-            @PathVariable Long employeeld,
+            @PathVariable Long employeeId,
             @PathVariable Long deviceltemld) {
         return service.validateEligibility(employeeld, deviceltemld);
     }
