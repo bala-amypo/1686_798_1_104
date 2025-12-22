@@ -9,5 +9,5 @@ import com.example.demo.entity.EligibilityCheckRecord;
 public interface EligibilityCheckRecordRepository
         extends JpaRepository<EligibilityCheckRecord, Long> {
 
-    List<EligibilityCheckRecord> findByEmployeeld(Long employeeld);
+    List<EligibilityCheckRecord> findByEmployeeId(Long employeeId);
 }
