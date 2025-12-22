@@ -28,7 +28,6 @@ public class EmployeeProfileServiceImpl implements EmployeeProfileService {
 
         return repository.save(employee);
     }
-
     @Override
     public EmployeeProfile getEmployeeById(Long id) {
         return repository.findById(id)
