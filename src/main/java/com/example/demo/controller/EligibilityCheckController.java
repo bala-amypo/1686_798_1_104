@@ -19,8 +19,7 @@ public class EligibilityCheckController {
             @PathVariable Long deviceltemld) {
         return service.validateEligibility(employeeld, deviceltemld);
     }
-
-    @GetMapping("/employee/{employeeld}")
+@GetMapping("/employee/{employeeld}")
     public List<EligibilityCheckRecord> getByEmployee(@PathVariable Long employeeld) {
         return service.getChecksByEmployee(employeeld);
     }
