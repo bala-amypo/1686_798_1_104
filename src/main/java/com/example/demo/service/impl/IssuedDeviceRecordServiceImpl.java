@@ -60,3 +60,4 @@ public class IssuedDeviceRecordServiceImpl implements IssuedDeviceRecordService 
         return repository.findByEmployeeId(employeeId);
     }
 }
+
