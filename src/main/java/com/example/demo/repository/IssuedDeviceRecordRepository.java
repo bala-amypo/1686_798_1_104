@@ -18,3 +18,4 @@ public interface IssuedDeviceRecordRepository
 
     List<IssuedDeviceRecord> findByEmployeeId(Long employeeId);
 }
+
