@@ -31,6 +31,17 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
         this.eligibilityRepo = eligibilityRepo;
     }
 
+    // =========================================================
+    // REQUIRED BY TESTS (UserAccount + DeviceCatalogItem)
+    // =========================================================
+    @Override
+    public EligibilityCheckRecord validateEligibility(UserAccount user, DeviceCatalogItem device) {
+        return validateEligibility(user.getEmployeeId(), device.getId());
+    }
+
+    // =========================================================
+    // CORE LOGIC (Long IDs)
+    // =========================================================
     @Override
     public EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceItemId) {
 
@@ -50,13 +61,13 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
         EmployeeProfile emp = empOpt.get();
         DeviceCatalogItem dev = devOpt.get();
 
-        if (!emp.getActive()) {
+        if (!Boolean.TRUE.equals(emp.getActive())) {
             rec.setIsEligible(false);
             rec.setReason("Employee not active");
             return eligibilityRepo.save(rec);
         }
 
-        if (!dev.getActive()) {
+        if (!Boolean.TRUE.equals(dev.getActive())) {
             rec.setIsEligible(false);
             rec.setReason("Device inactive");
             return eligibilityRepo.save(rec);
@@ -104,6 +115,9 @@ public class EligibilityCheckServiceImpl implements EligibilityCheckService {
         return eligibilityRepo.save(rec);
     }
 
+    // =========================================================
+    // FETCH HISTORY
+    // =========================================================
     @Override
     public List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId) {
         return eligibilityRepo.findByEmployeeId(employeeId);

@@ -3,8 +3,7 @@ import com.example.demo.model.DeviceCatalogItem;
 
 public interface EligibilityCheckService {
 
-    EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceItemId);
-
+    
     // ✅ ADD THIS
     EligibilityCheckRecord validateEligibility(UserAccount user, DeviceCatalogItem device);
 
