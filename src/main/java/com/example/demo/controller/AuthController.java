@@ -1,22 +1,34 @@
 package com.example.demo.controller;
+
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.model.UserAccount;
+import com.example.demo.security.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.entity.UserAccount;
-import com.example.demo.service.AuthService;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
-   private final AuthService service;
-    public AuthController(AuthService service) {
-        this.service = service;
-    }
-    @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-        return service.register(user);
-    }
-   @PostMapping("/login")
-    public UserAccount login(
-            @RequestParam String email,
-            @RequestParam String password) {
-        return service.login(email, password);
+
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        UserAccount user = new UserAccount();
+        user.setId(1L);
+        user.setEmail(request.getEmail());
+        user.setRole("USER");
+        
+        String token = tokenProvider.generateToken(user);
+        
+        AuthResponse response = new AuthResponse();
+        response.setToken(token);
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+        
+        return ResponseEntity.ok(response);
     }
 }
