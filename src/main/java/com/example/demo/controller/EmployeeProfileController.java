@@ -1,43 +1,32 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
+import com.example.demo.model.EmployeeProfile;
+import com.example.demo.service.EmployeeProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.entity.EmployeeProfile;
-import com.example.demo.service.EmployeeProfileService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeProfileController {
+public class EmployeeController {
 
-    private final EmployeeProfileService service;
+    @Autowired
+    private EmployeeProfileService employeeService;
 
-    public EmployeeProfileController(EmployeeProfileService service) {
-        this.service = service;
+    @GetMapping("/")
+    public ResponseEntity<List<EmployeeProfile>> getAllEmployees() {
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    
-    @PostMapping
-    public EmployeeProfile createEmployee(@RequestBody EmployeeProfile employee) {
-        return service.createEmployee(employee);
+    @PostMapping("/")
+    public ResponseEntity<EmployeeProfile> createEmployee(@RequestBody EmployeeProfile employee) {
+        return ResponseEntity.ok(employeeService.createEmployee(employee));
     }
 
     @GetMapping("/{id}")
-    public EmployeeProfile getEmployee(@PathVariable Long id) {
-        return service.getEmployeeById(id);
-    }
-
-    
-    @GetMapping
-    public List<EmployeeProfile> getAllEmployees() {
-        return service.getAllEmployees();
-    }
-
-    @PutMapping("/{id}/status")
-    public EmployeeProfile updateStatus(
-            @PathVariable Long id,
-            @RequestParam boolean active) {
-        return service.updateEmployeeStatus(id, active);
+    public ResponseEntity<EmployeeProfile> getEmployee(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 }
