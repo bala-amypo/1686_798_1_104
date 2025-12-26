@@ -25,6 +25,7 @@
 //     }
 // }
 
+
 package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
@@ -39,23 +40,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+            // Disable CSRF for APIs & Swagger
             .csrf(csrf -> csrf.disable())
+
+            // Allow Swagger and all endpoints
             .authorizeHttpRequests(auth -> auth
-                // ✅ ALLOW SWAGGER
                 .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
                 ).permitAll()
-
-                // ✅ ALLOW AUTH (optional)
-                .requestMatchers("/auth/**").permitAll()
-
-                // ❗ Everything else open (for now)
                 .anyRequest().permitAll()
             );
 
         return http.build();
     }
 }
+
+
 
