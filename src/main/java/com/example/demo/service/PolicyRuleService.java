@@ -1,14 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.model.PolicyRule;
 import java.util.List;
 
-import com.example.demo.entity.PolicyRule;
-
 public interface PolicyRuleService {
-
     PolicyRule createRule(PolicyRule rule);
-
     List<PolicyRule> getAllRules();
-
     List<PolicyRule> getActiveRules();
 }

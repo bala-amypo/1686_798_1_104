@@ -1,15 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.model.EmployeeProfile;
 import java.util.List;
-import com.example.demo.entity.EmployeeProfile;
 
 public interface EmployeeProfileService {
-
     EmployeeProfile createEmployee(EmployeeProfile employee);
-
+    EmployeeProfile updateEmployeeStatus(Long id, Boolean active);
     EmployeeProfile getEmployeeById(Long id);
-
     List<EmployeeProfile> getAllEmployees();
-
-    EmployeeProfile updateEmployeeStatus(Long id, boolean active);
 }
