@@ -2,9 +2,11 @@ package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -12,22 +14,45 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // Required for JwtTokenProvider (DO NOT REMOVE)
+    @Bean
+    @Primary
+    public String jwtSecretKey() {
+        return "mysupersecretkeymysupersecretkey12345";
+    }
+
+    @Bean
+    @Primary
+    public Long jwtValidityInMilliseconds() {
+        return 3600000L;
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // ✅ allow swagger
+
+                // ✅ ALLOW SWAGGER
                 .requestMatchers(
+                        "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
-                        "/swagger-ui.html"
+                        "/v3/api-docs",
+                        "/swagger-resources/**",
+                        "/webjars/**"
                 ).permitAll()
-                // ✅ allow everything else (for now)
+
+                // ✅ ALLOW EVERYTHING ELSE (for now)
                 .anyRequest().permitAll()
             )
-            // ✅ REQUIRED for Spring Boot 3
-            .httpBasic(Customizer.withDefaults());
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(form -> form.disable());
 
         return http.build();
     }
