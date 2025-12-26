@@ -1,33 +1,33 @@
-package com.example.demo.controller;
+// package com.example.demo.controller;
 
-import com.example.demo.model.IssuedDeviceRecord;
-import com.example.demo.service.IssuedDeviceRecordService;
-import org.springframework.web.bind.annotation.*;
+// import com.example.demo.model.IssuedDeviceRecord;
+// import com.example.demo.service.IssuedDeviceRecordService;
+// import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+// import java.util.List;
 
-@RestController
-@RequestMapping("/api/issued-devices")
-public class IssuedDeviceRecordController {
+// @RestController
+// @RequestMapping("/api/issued-devices")
+// public class IssuedDeviceRecordController {
 
-    private final IssuedDeviceRecordService service;
+//     private final IssuedDeviceRecordService service;
 
-    public IssuedDeviceRecordController(IssuedDeviceRecordService service) {
-        this.service = service;
-    }
+//     public IssuedDeviceRecordController(IssuedDeviceRecordService service) {
+//         this.service = service;
+//     }
 
-    @PostMapping
-    public IssuedDeviceRecord issue(@RequestBody IssuedDeviceRecord record) {
-        return service.issueDevice(record);
-    }
+//     @PostMapping
+//     public IssuedDeviceRecord issue(@RequestBody IssuedDeviceRecord record) {
+//         return service.issueDevice(record);
+//     }
 
-    @PutMapping("/{id}/return")
-    public IssuedDeviceRecord returnDevice(@PathVariable Long id) {
-        return service.returnDevice(id);
-    }
+//     @PutMapping("/{id}/return")
+//     public IssuedDeviceRecord returnDevice(@PathVariable Long id) {
+//         return service.returnDevice(id);
+//     }
 
-    @GetMapping("/employee/{employeeId}")
-    public List<IssuedDeviceRecord> getByEmployee(@PathVariable Long employeeId) {
-        return service.getIssuedDevicesByEmployee(employeeId);
-    }
-}
+//     @GetMapping("/employee/{employeeId}")
+//     public List<IssuedDeviceRecord> getByEmployee(@PathVariable Long employeeId) {
+//         return service.getIssuedDevicesByEmployee(employeeId);
+//     }
+// }
