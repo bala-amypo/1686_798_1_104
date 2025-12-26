@@ -1,75 +1,75 @@
-package com.example.demo.model;
+// package com.example.demo.model;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
+// import jakarta.persistence.*;
+// import java.time.LocalDate;
 
-@Entity
-@Table(name = "issued_device_records")
-public class IssuedDeviceRecord {
+// @Entity
+// @Table(name = "issued_device_records")
+// public class IssuedDeviceRecord {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    private Long employeeId;
+//     private Long employeeId;
 
-    // ✅ REQUIRED BY TESTS
-    private Long deviceItemId;
+//     // ✅ REQUIRED BY TESTS
+//     private Long deviceItemId;
 
-    private LocalDate issuedDate;
-    private LocalDate returnedDate;
-    private String status;
+//     private LocalDate issuedDate;
+//     private LocalDate returnedDate;
+//     private String status;
 
-    /* ===== GETTERS & SETTERS ===== */
+//     /* ===== GETTERS & SETTERS ===== */
 
-    public Long getId() {
-        return id;
-    }
+//     public Long getId() {
+//         return id;
+//     }
 
-    // ✅ REQUIRED BY TESTS
-    public void setId(Long id) {
-        this.id = id;
-    }
+//     // ✅ REQUIRED BY TESTS
+//     public void setId(Long id) {
+//         this.id = id;
+//     }
 
-    public Long getEmployeeId() {
-        return employeeId;
-    }
+//     public Long getEmployeeId() {
+//         return employeeId;
+//     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
+//     public void setEmployeeId(Long employeeId) {
+//         this.employeeId = employeeId;
+//     }
 
-    // ✅ REQUIRED BY TESTS
-    public Long getDeviceItemId() {
-        return deviceItemId;
-    }
+//     // ✅ REQUIRED BY TESTS
+//     public Long getDeviceItemId() {
+//         return deviceItemId;
+//     }
 
-    // ✅ REQUIRED BY TESTS
-    public void setDeviceItemId(Long deviceItemId) {
-        this.deviceItemId = deviceItemId;
-    }
+//     // ✅ REQUIRED BY TESTS
+//     public void setDeviceItemId(Long deviceItemId) {
+//         this.deviceItemId = deviceItemId;
+//     }
 
-    public LocalDate getIssuedDate() {
-        return issuedDate;
-    }
+//     public LocalDate getIssuedDate() {
+//         return issuedDate;
+//     }
 
-    public void setIssuedDate(LocalDate issuedDate) {
-        this.issuedDate = issuedDate;
-    }
+//     public void setIssuedDate(LocalDate issuedDate) {
+//         this.issuedDate = issuedDate;
+//     }
 
-    public LocalDate getReturnedDate() {
-        return returnedDate;
-    }
+//     public LocalDate getReturnedDate() {
+//         return returnedDate;
+//     }
 
-    public void setReturnedDate(LocalDate returnedDate) {
-        this.returnedDate = returnedDate;
-    }
+//     public void setReturnedDate(LocalDate returnedDate) {
+//         this.returnedDate = returnedDate;
+//     }
 
-    public String getStatus() {
-        return status;
-    }
+//     public String getStatus() {
+//         return status;
+//     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-}
+//     public void setStatus(String status) {
+//         this.status = status;
+//     }
+// }
