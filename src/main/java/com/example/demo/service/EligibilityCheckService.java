@@ -1,11 +1,11 @@
-import com.example.demo.model.UserAccount;
-import com.example.demo.model.DeviceCatalogItem;
+package com.example.demo.service;
+
+import com.example.demo.model.EligibilityCheckRecord;
+import java.util.List;
 
 public interface EligibilityCheckService {
 
-    
-    // ✅ ADD THIS
-    EligibilityCheckRecord validateEligibility(UserAccount user, DeviceCatalogItem device);
+    EligibilityCheckRecord validateEligibility(Long employeeId, Long deviceItemId);
 
     List<EligibilityCheckRecord> getChecksByEmployee(Long employeeId);
 }
