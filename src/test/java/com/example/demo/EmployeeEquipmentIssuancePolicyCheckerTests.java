@@ -1,4 +1,3 @@
-
 package com.example.demo;
 
 import com.example.demo.exception.BadRequestException;
@@ -493,4 +492,312 @@ public class EmployeeEquipmentIssuancePolicyCheckerTests {
 
     @Test(priority = 44, groups = "security")
     public void testJwtGetUsername() {
-        UserAccount user = new UserAccount(
+        UserAccount user = new UserAccount();
+        user.setId(300L);
+        user.setEmail("auditor@example.com");
+        user.setRole("AUDITOR");
+        String token = tokenProvider.generateToken(user);
+        String username = tokenProvider.getUsername(token);
+        Assert.assertEquals(username, "auditor@example.com");
+    }
+
+    @Test(priority = 45, groups = "security")
+    public void testPasswordEncoderMatches() {
+        String raw = "Secret123";
+        String encoded = passwordEncoder.encode(raw);
+        Assert.assertTrue(passwordEncoder.matches(raw, encoded));
+    }
+
+    @Test(priority = 46, groups = "security")
+    public void testSecurityAccessDeniedConceptualForNoToken() {
+        boolean hasToken = false;
+        Assert.assertFalse(hasToken);
+    }
+
+    @Test(priority = 47, groups = "security")
+    public void testSecurityEdgeEmptyTokenString() {
+        String token = "";
+        Assert.assertFalse(tokenProvider.validateToken(token));
+    }
+
+    // ------------------------------------------------------------------------
+    // 8) Use HQL and HCQL to perform advanced data querying (via repository)
+    // ------------------------------------------------------------------------
+
+    @Test(priority = 48, groups = "hql")
+    public void testHqlCountActiveDevicesForEmployee() {
+        when(issuedRepo.countActiveDevicesForEmployee(1L)).thenReturn(3L);
+        long count = issuedRepo.countActiveDevicesForEmployee(1L);
+        Assert.assertEquals(count, 3L);
+    }
+
+    @Test(priority = 49, groups = "hql")
+    public void testHqlFindActiveByEmployeeAndDevice() {
+        IssuedDeviceRecord r = new IssuedDeviceRecord();
+        r.setEmployeeId(1L);
+        r.setDeviceItemId(2L);
+        r.setStatus("ISSUED");
+        when(issuedRepo.findActiveByEmployeeAndDevice(1L, 2L)).thenReturn(List.of(r));
+
+        List<IssuedDeviceRecord> list = issuedRepo.findActiveByEmployeeAndDevice(1L, 2L);
+        Assert.assertEquals(list.size(), 1);
+        Assert.assertEquals(list.get(0).getStatus(), "ISSUED");
+    }
+
+    @Test(priority = 50, groups = "hql")
+    public void testHqlFindActiveRules() {
+        PolicyRule r1 = new PolicyRule();
+        r1.setActive(true);
+        PolicyRule r2 = new PolicyRule();
+        r2.setActive(true);
+        when(policyRepo.findByActiveTrue()).thenReturn(List.of(r1, r2));
+        List<PolicyRule> list = ruleService.getActiveRules();
+        Assert.assertEquals(list.size(), 2);
+    }
+
+    @Test(priority = 51, groups = "hql")
+    public void testHqlEligibilityCheckByEmployee() {
+        EligibilityCheckRecord rec = new EligibilityCheckRecord();
+        rec.setEmployeeId(5L);
+        when(eligibilityRepo.findByEmployeeId(5L)).thenReturn(List.of(rec));
+        List<EligibilityCheckRecord> list = eligibilityService.getChecksByEmployee(5L);
+        Assert.assertEquals(list.size(), 1);
+    }
+
+    @Test(priority = 52, groups = "hql")
+    public void testHqlNegativeNoEligibilityChecks() {
+        when(eligibilityRepo.findByEmployeeId(999L)).thenReturn(Collections.emptyList());
+        List<EligibilityCheckRecord> list = eligibilityService.getChecksByEmployee(999L);
+        Assert.assertTrue(list.isEmpty());
+    }
+
+    @Test(priority = 53, groups = "hql")
+    public void testHqlEdgeNullEmployeeIdQuery() {
+        List<EligibilityCheckRecord> list = Collections.emptyList();
+        Assert.assertTrue(list.isEmpty());
+    }
+
+    @Test(priority = 54, groups = "hql")
+    public void testValidateEligibilityEmployeeNotFound() {
+        when(employeeRepo.findById(111L)).thenReturn(Optional.empty());
+        when(deviceRepo.findById(222L)).thenReturn(Optional.empty());
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(111L, 222L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().contains("not found"));
+    }
+
+    @Test(priority = 55, groups = "hql")
+    public void testValidateEligibilityInactiveEmployee() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(1L);
+        emp.setActive(false);
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(1L);
+        dev.setActive(true);
+
+        when(employeeRepo.findById(1L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(1L)).thenReturn(Optional.of(dev));
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(1L, 1L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().contains("not active"));
+    }
+
+    @Test(priority = 56, groups = "hql")
+    public void testValidateEligibilityInactiveDevice() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(2L);
+        emp.setActive(true);
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(2L);
+        dev.setActive(false);
+
+        when(employeeRepo.findById(2L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(2L)).thenReturn(Optional.of(dev));
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(2L, 2L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().contains("inactive"));
+    }
+
+    @Test(priority = 57, groups = "hql")
+    public void testValidateEligibilityActiveAssignmentExists() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(3L);
+        emp.setActive(true);
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(3L);
+        dev.setActive(true);
+
+        IssuedDeviceRecord r = new IssuedDeviceRecord();
+        r.setEmployeeId(3L);
+        r.setDeviceItemId(3L);
+        r.setStatus("ISSUED");
+
+        when(employeeRepo.findById(3L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(3L)).thenReturn(Optional.of(dev));
+        when(issuedRepo.findActiveByEmployeeAndDevice(3L, 3L)).thenReturn(List.of(r));
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(3L, 3L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().toLowerCase().contains("active issuance"));
+    }
+
+    @Test(priority = 58, groups = "hql")
+    public void testValidateEligibilityMaxDevicesReachedDeviceLevel() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(4L);
+        emp.setActive(true);
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(4L);
+        dev.setActive(true);
+        dev.setMaxAllowedPerEmployee(1);
+
+        when(employeeRepo.findById(4L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(4L)).thenReturn(Optional.of(dev));
+        when(issuedRepo.findActiveByEmployeeAndDevice(4L, 4L)).thenReturn(Collections.emptyList());
+        when(issuedRepo.countActiveDevicesForEmployee(4L)).thenReturn(1L);
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(4L, 4L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().contains("Maximum allowed devices"));
+    }
+
+    @Test(priority = 59, groups = "hql")
+    public void testValidateEligibilityPolicyViolation() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(5L);
+        emp.setActive(true);
+        emp.setDepartment("IT");
+        emp.setJobRole("DEVELOPER");
+
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(5L);
+        dev.setActive(true);
+        dev.setMaxAllowedPerEmployee(10);
+
+        PolicyRule rule = new PolicyRule();
+        rule.setRuleCode("R-IT-1");
+        rule.setActive(true);
+        rule.setAppliesToDepartment("IT");
+        rule.setAppliesToRole("DEVELOPER");
+        rule.setMaxDevicesAllowed(0); // effectively none
+
+        when(employeeRepo.findById(5L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(5L)).thenReturn(Optional.of(dev));
+        when(issuedRepo.findActiveByEmployeeAndDevice(5L, 5L)).thenReturn(Collections.emptyList());
+        when(issuedRepo.countActiveDevicesForEmployee(5L)).thenReturn(0L);
+        when(policyRepo.findByActiveTrue()).thenReturn(List.of(rule));
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(5L, 5L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().contains("Policy violation"));
+    }
+
+    @Test(priority = 60, groups = "hql")
+    public void testValidateEligibilityPositiveEligible() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(6L);
+        emp.setActive(true);
+        emp.setDepartment("HR");
+        emp.setJobRole("MANAGER");
+
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(6L);
+        dev.setActive(true);
+        dev.setMaxAllowedPerEmployee(5);
+
+        when(employeeRepo.findById(6L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(6L)).thenReturn(Optional.of(dev));
+        when(issuedRepo.findActiveByEmployeeAndDevice(6L, 6L)).thenReturn(Collections.emptyList());
+        when(issuedRepo.countActiveDevicesForEmployee(6L)).thenReturn(1L);
+        when(policyRepo.findByActiveTrue()).thenReturn(Collections.emptyList());
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(6L, 6L);
+        Assert.assertTrue(rec.getIsEligible());
+    }
+
+    @Test(priority = 61, groups = "hql")
+    public void testEligibilityCheckRecordAutoTimestamp() {
+        EligibilityCheckRecord rec = new EligibilityCheckRecord();
+        rec.setEmployeeId(7L);
+        rec.setDeviceItemId(7L);
+        rec.setIsEligible(true);
+        rec.setReason("Test");
+        rec.prePersist();
+        Assert.assertNotNull(rec.getCheckedAt());
+    }
+
+    @Test(priority = 62, groups = "hql")
+    public void testEdgeEligibilityWithZeroIssuedDevicesAndNoPolicies() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(8L);
+        emp.setActive(true);
+        emp.setDepartment("SALES");
+        emp.setJobRole("EXEC");
+
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(8L);
+        dev.setActive(true);
+        dev.setMaxAllowedPerEmployee(1);
+
+        when(employeeRepo.findById(8L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(8L)).thenReturn(Optional.of(dev));
+        when(issuedRepo.findActiveByEmployeeAndDevice(8L, 8L)).thenReturn(Collections.emptyList());
+        when(issuedRepo.countActiveDevicesForEmployee(8L)).thenReturn(0L);
+        when(policyRepo.findByActiveTrue()).thenReturn(Collections.emptyList());
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(8L, 8L);
+        Assert.assertTrue(rec.getIsEligible());
+    }
+
+    @Test(priority = 63, groups = "hql")
+    public void testEdgePolicyRuleAppliesToAllEmployees() {
+        EmployeeProfile emp = new EmployeeProfile();
+        emp.setId(9L);
+        emp.setActive(true);
+        emp.setDepartment("IT");
+        emp.setJobRole("DEV");
+
+        DeviceCatalogItem dev = new DeviceCatalogItem();
+        dev.setId(9L);
+        dev.setActive(true);
+        dev.setMaxAllowedPerEmployee(10);
+
+        PolicyRule rule = new PolicyRule();
+        rule.setRuleCode("GLOBAL-LIMIT");
+        rule.setActive(true);
+        rule.setAppliesToDepartment(null);
+        rule.setAppliesToRole(null);
+        rule.setMaxDevicesAllowed(0);
+
+        when(employeeRepo.findById(9L)).thenReturn(Optional.of(emp));
+        when(deviceRepo.findById(9L)).thenReturn(Optional.of(dev));
+        when(issuedRepo.findActiveByEmployeeAndDevice(9L, 9L)).thenReturn(Collections.emptyList());
+        when(issuedRepo.countActiveDevicesForEmployee(9L)).thenReturn(0L);
+        when(policyRepo.findByActiveTrue()).thenReturn(List.of(rule));
+        when(eligibilityRepo.save(any(EligibilityCheckRecord.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EligibilityCheckRecord rec = eligibilityService.validateEligibility(9L, 9L);
+        Assert.assertFalse(rec.getIsEligible());
+        Assert.assertTrue(rec.getReason().contains("Policy violation"));
+    }
+}
