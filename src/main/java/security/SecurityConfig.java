@@ -18,26 +18,42 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ REQUIRED FOR JwtTokenProvider(String, long)
+    // Required for JwtTokenProvider (DO NOT REMOVE)
     @Bean
     @Primary
     public String jwtSecretKey() {
         return "mysupersecretkeymysupersecretkey12345";
     }
 
-    // ✅ REQUIRED FOR JwtTokenProvider(String, long)
     @Bean
     @Primary
     public Long jwtValidityInMilliseconds() {
-        return 3600000L; // 1 hour
+        return 3600000L;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authz -> authz
+
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+
+                // ✅ ALLOW SWAGGER
+                .requestMatchers(
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs",
+                        "/swagger-resources/**",
+                        "/webjars/**"
+                ).permitAll()
+
+                // ✅ ALLOW EVERYTHING ELSE (for now)
                 .anyRequest().permitAll()
-            );
+            )
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(form -> form.disable());
+
         return http.build();
     }
 }
