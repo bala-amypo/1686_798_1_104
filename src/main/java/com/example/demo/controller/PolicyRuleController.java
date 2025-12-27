@@ -32,37 +32,84 @@
 //     }
 // }
 
-package com.example.demo.controller;
+// package com.example.demo.controller;
 
-import com.example.demo.model.PolicyRule;
-import com.example.demo.service.PolicyRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+// import com.example.demo.model.PolicyRule;
+// import com.example.demo.service.PolicyRuleService;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.*;
+
+// import java.util.List;
+
+// @RestController
+// @RequestMapping("/api/policies")
+// public class PolicyRuleController {
+
+//     @Autowired
+//     private PolicyRuleService ruleService;
+
+//     @GetMapping("/")
+//     // @GetMapping
+//     public ResponseEntity<List<PolicyRule>> getAllRules() {
+//         return ResponseEntity.ok(ruleService.getAllRules());
+//     }
+
+//     @GetMapping("/active")
+//     public ResponseEntity<List<PolicyRule>> getActiveRules() {
+//         return ResponseEntity.ok(ruleService.getActiveRules());
+//     }
+
+//      @PostMapping("/")
+//     // @PostMapping
+//     public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
+//         return ResponseEntity.ok(ruleService.createRule(rule));
+//     }
+// }
+
+package com.example.demo.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.model.PolicyRule;
+import com.example.demo.service.PolicyRuleService;
+
 @RestController
-@RequestMapping("/api/policies")
+@RequestMapping("/api/policy-rules")
 public class PolicyRuleController {
 
-    @Autowired
-    private PolicyRuleService ruleService;
+    private final PolicyRuleService service;
 
-    @GetMapping("/")
-    // @GetMapping
-    public ResponseEntity<List<PolicyRule>> getAllRules() {
-        return ResponseEntity.ok(ruleService.getAllRules());
+    public PolicyRuleController(PolicyRuleService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public PolicyRule createRule(@RequestBody PolicyRule rule) {
+        return service.createRule(rule);
+    }
+
+    @GetMapping
+    public List<PolicyRule> getAllRules() {
+        return service.getAllRules();
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<PolicyRule>> getActiveRules() {
-        return ResponseEntity.ok(ruleService.getActiveRules());
+    public List<PolicyRule> getActiveRules() {
+        return service.getActiveRules();
     }
 
-     @PostMapping("/")
-    // @PostMapping
-    public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
-        return ResponseEntity.ok(ruleService.createRule(rule));
+    @PutMapping("/{id}/active")
+    public PolicyRule updateActiveStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active) {
+        return service.updateRuleActive(id, active);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteRule(@PathVariable Long id) {
+        service.deleteRule(id);
     }
 }
