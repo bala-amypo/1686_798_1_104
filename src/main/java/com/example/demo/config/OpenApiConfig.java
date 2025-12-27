@@ -14,7 +14,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-public class SwaggerConfig {
+public class OpenApiConfig {
 
     public static final String SECURITY_SCHEME_NAME = "bearerAuth";
 
