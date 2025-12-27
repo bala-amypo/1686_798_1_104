@@ -37,38 +37,58 @@
 // }
 
 
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.PolicyRule;
-import com.example.demo.repository.PolicyRuleRepository;
-import com.example.demo.service.PolicyRuleService;
-import org.springframework.stereotype.Service;
+// import com.example.demo.exception.BadRequestException;
+// import com.example.demo.model.PolicyRule;
+// import com.example.demo.repository.PolicyRuleRepository;
+// import com.example.demo.service.PolicyRuleService;
+// import org.springframework.stereotype.Service;
+// import java.util.List;
+
+// @Service
+// public class PolicyRuleServiceImpl implements PolicyRuleService {
+//     private final PolicyRuleRepository policyRepo;
+
+//     public PolicyRuleServiceImpl(PolicyRuleRepository policyRepo) {
+//         this.policyRepo = policyRepo;
+//     }
+
+//     @Override
+//     public PolicyRule createRule(PolicyRule rule) {
+//         if (policyRepo.findByRuleCode(rule.getRuleCode()).isPresent()) {
+//             throw new BadRequestException("Rule code already exists");
+//         }
+//         return policyRepo.save(rule);
+//     }
+
+//     @Override
+//     public List<PolicyRule> getAllRules() {
+//         return policyRepo.findAll();
+//     }
+
+//     @Override
+//     public List<PolicyRule> getActiveRules() {
+//         return policyRepo.findByActiveTrue();
+//     }
+// }
+
+package com.example.demo.service;
+
 import java.util.List;
 
-@Service
-public class PolicyRuleServiceImpl implements PolicyRuleService {
-    private final PolicyRuleRepository policyRepo;
+import com.example.demo.model.PolicyRule;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository policyRepo) {
-        this.policyRepo = policyRepo;
-    }
+public interface PolicyRuleService {
 
-    @Override
-    public PolicyRule createRule(PolicyRule rule) {
-        if (policyRepo.findByRuleCode(rule.getRuleCode()).isPresent()) {
-            throw new BadRequestException("Rule code already exists");
-        }
-        return policyRepo.save(rule);
-    }
+    PolicyRule createRule(PolicyRule rule);
 
-    @Override
-    public List<PolicyRule> getAllRules() {
-        return policyRepo.findAll();
-    }
+    List<PolicyRule> getAllRules();
 
-    @Override
-    public List<PolicyRule> getActiveRules() {
-        return policyRepo.findByActiveTrue();
-    }
+    List<PolicyRule> getActiveRules();
+
+    PolicyRule updateRuleActive(Long id, boolean active);
+
+    void deleteRule(Long id);
 }
+
