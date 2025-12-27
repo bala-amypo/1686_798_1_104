@@ -58,7 +58,8 @@ public class DeviceController {
         return ResponseEntity.ok(deviceService.getAllItems());
     }
 
-    @PostMapping("/")
+    // @PostMapping("/")
+    @PostMapping
     public ResponseEntity<DeviceCatalogItem> createDevice(@RequestBody DeviceCatalogItem device) {
         return ResponseEntity.ok(deviceService.createItem(device));
     }

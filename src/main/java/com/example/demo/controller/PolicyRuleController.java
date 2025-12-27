@@ -49,7 +49,8 @@ public class PolicyRuleController {
     @Autowired
     private PolicyRuleService ruleService;
 
-    @GetMapping("/")
+    // @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PolicyRule>> getAllRules() {
         return ResponseEntity.ok(ruleService.getAllRules());
     }
@@ -59,7 +60,8 @@ public class PolicyRuleController {
         return ResponseEntity.ok(ruleService.getActiveRules());
     }
 
-    @PostMapping("/")
+    // @PostMapping("/")
+    @PostMapping
     public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
         return ResponseEntity.ok(ruleService.createRule(rule));
     }
