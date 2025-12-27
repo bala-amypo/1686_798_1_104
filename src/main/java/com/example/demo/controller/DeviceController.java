@@ -52,14 +52,14 @@ public class DeviceController {
     @Autowired
     private DeviceCatalogService deviceService;
 
-    // @GetMapping("/")
-    @GetMapping
+     @GetMapping("/")
+    // @GetMapping
     public ResponseEntity<List<DeviceCatalogItem>> getAllDevices() {
         return ResponseEntity.ok(deviceService.getAllItems());
     }
 
-    // @PostMapping("/")
-    @PostMapping
+    @PostMapping("/")
+    // @PostMapping
     public ResponseEntity<DeviceCatalogItem> createDevice(@RequestBody DeviceCatalogItem device) {
         return ResponseEntity.ok(deviceService.createItem(device));
     }

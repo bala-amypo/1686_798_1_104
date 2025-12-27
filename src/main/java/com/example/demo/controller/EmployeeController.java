@@ -56,14 +56,14 @@ public class EmployeeController {
     @Autowired
     private EmployeeProfileService employeeService;
 
-    // @GetMapping("/")
-    @GetMapping
+    @GetMapping("/")
+    // @GetMapping
     public ResponseEntity<List<EmployeeProfile>> getAllEmployees() {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    // @PostMapping("/")
-    @PostMapping
+    @PostMapping("/")
+    // @PostMapping
     public ResponseEntity<EmployeeProfile> createEmployee(@RequestBody EmployeeProfile employee) {
         return ResponseEntity.ok(employeeService.createEmployee(employee));
     }
