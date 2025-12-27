@@ -52,7 +52,8 @@ public class DeviceController {
     @Autowired
     private DeviceCatalogService deviceService;
 
-    @GetMapping("/")
+    // @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<DeviceCatalogItem>> getAllDevices() {
         return ResponseEntity.ok(deviceService.getAllItems());
     }
