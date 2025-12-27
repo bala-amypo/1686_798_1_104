@@ -98,3 +98,9 @@
 //         filterChain.doFilter(request, response);
 //     }
 // }
+
+public class JwtAuthenticationFilter{
+    public void Filter(){
+        
+    }
+}
