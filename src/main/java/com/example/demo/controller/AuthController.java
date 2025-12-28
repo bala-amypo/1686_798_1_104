@@ -113,5 +113,95 @@
 
 
 
+package com.example.demo.controller;
 
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.UserAccount;
+import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.security.JwtTokenProvider;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/auth")
+@Tag(name = "Authentication")
+public class AuthController {
+
+    private final UserAccountRepository userRepo;
+    private final JwtTokenProvider tokenProvider;
+    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    public AuthController(UserAccountRepository userRepo,
+                          JwtTokenProvider tokenProvider) {
+        this.userRepo = userRepo;
+        this.tokenProvider = tokenProvider;
+    }
+
+    // ---------- LOGIN REQUEST (NO LOMBOK) ----------
+    static class LoginRequest {
+        private String email;
+        private String password;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
+
+    // ---------- REGISTER ----------
+    @PostMapping("/register")
+    public UserAccount register(@RequestBody UserAccount user) {
+
+        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
+            throw new BadRequestException("Duplicate email");
+        }
+
+        user.setPassword(encoder.encode(user.getPassword()));
+
+        if (user.getRole() == null) {
+            user.setRole("IT_OPERATOR");
+        }
+
+        user.setActive(true);
+
+        return userRepo.save(user);
+    }
+
+    // ---------- LOGIN ----------
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody LoginRequest request) {
+
+        UserAccount user = userRepo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadRequestException("Invalid email"));
+
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
+            throw new BadRequestException("Invalid password");
+        }
+
+        String token = tokenProvider.generateToken(user);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getId());
+        response.put("email", user.getEmail());
+        response.put("role", user.getRole());
+
+        return response;
+    }
+}
