@@ -62,6 +62,26 @@ public class AuthController {
      @Autowired
      private JwtTokenProvider tokenProvider;
 
+
+     @PostMapping("/register")
+public ResponseEntity<AuthResponse> register(@RequestBody AuthRequest request) {
+
+    // Normally you save user to DB here
+    UserAccount user = new UserAccount();
+    user.setId(2L); // dummy id
+    user.setEmail(request.getEmail());
+    user.setRole("USER");
+
+    String token = tokenProvider.generateToken(user);
+
+    AuthResponse response = new AuthResponse();
+    response.setToken(token);
+    response.setEmail(user.getEmail());
+    response.setRole(user.getRole());
+
+    return ResponseEntity.ok(response);
+}
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         UserAccount user = new UserAccount();
