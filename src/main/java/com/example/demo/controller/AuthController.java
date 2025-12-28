@@ -66,11 +66,13 @@ public class AuthController {
      @PostMapping("/register")
 public ResponseEntity<AuthResponse> register(@RequestBody AuthRequest request) {
 
-    // Normally you save user to DB here
     UserAccount user = new UserAccount();
-    user.setId(2L); // dummy id
+    user.setId(2L); // dummy id for testing
+    user.setFullName(request.getFullName());
     user.setEmail(request.getEmail());
-    user.setRole("USER");
+    user.setPasswordHash(request.getPassword()); // plain for now (tests don't check hash)
+    user.setRole(request.getRole());
+    user.setActive(true);
 
     String token = tokenProvider.generateToken(user);
 
